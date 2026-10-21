@@ -1,0 +1,168 @@
+{
+  "name": "Event",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "start_at": {
+      "type": "string"
+    },
+    "end_at": {
+      "type": "string"
+    },
+    "all_day": {
+      "type": "boolean",
+      "default": false
+    },
+    "category": {
+      "type": "string",
+      "default": "personal"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ],
+      "default": "medium"
+    },
+    "location": {
+      "type": "string"
+    },
+    "repeat": {
+      "type": "string",
+      "enum": [
+        "none",
+        "daily",
+        "weekly",
+        "biweekly",
+        "monthly",
+        "yearly"
+      ],
+      "default": "none"
+    },
+    "repeat_interval": {
+      "type": "number",
+      "default": 1
+    },
+    "repeat_end_date": {
+      "type": "string"
+    },
+    "reminder_minutes": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "email_reminder": {
+      "type": "boolean",
+      "default": false
+    },
+    "email_recipients": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "email_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "done": {
+      "type": "boolean",
+      "default": false
+    },
+    "calendar_id": {
+      "type": "string"
+    },
+    "calendar_name": {
+      "type": "string"
+    },
+    "calendar_color": {
+      "type": "string"
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "visible_to": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "external_uid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "start_at"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.visible_to": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "data.visible_to": {
+            "$in": [
+              "{{user.id}}"
+            ]
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.visible_to": {
+            "$in": [
+              "{{user.id}}"
+            ]
+          }
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "name": "EventInvitation",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "event_start": {
+      "type": "string"
+    },
+    "inviter_id": {
+      "type": "string"
+    },
+    "inviter_name": {
+      "type": "string"
+    },
+    "invitee_id": {
+      "type": "string"
+    },
+    "invitee_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "declined",
+        "tentative"
+      ],
+      "default": "pending"
+    },
+    "responded_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "inviter_id",
+    "invitee_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.invitee_id": "{{user.id}}"
+        },
+        {
+          "data.inviter_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "data.inviter_id": "{{user.id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "data.invitee_id": "{{user.id}}"
+        },
+        {
+          "data.inviter_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.inviter_id": "{{user.id}}"
+        },
+        {
+          "data.invitee_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
